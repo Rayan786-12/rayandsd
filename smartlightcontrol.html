@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Light Control</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+      text-align: center;
+      padding: 50px;
+    }
+    .container {
+      background: #222;
+      padding: 20px;
+      border-radius: 10px;
+      display: inline-block;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 18px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #onBtn { background-color: #4CAF50; }
+    #offBtn { background-color: #f44336; }
+    input[type=range] {
+      width: 80%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Smart Light Control System</h1>
+    <button id="onBtn" onclick="sendCommand('ON')">Turn ON</button>
+    <button id="offBtn" onclick="sendCommand('OFF')">Turn OFF</button>
+
+    <h3>Brightness</h3>
+    <input type="range" id="brightnessSlider" min="0" max="255" onchange="updateBrightness(this.value)">
+    <p id="brightnessValue">0</p>
+
+    <h3>Color</h3>
+    <input type="color" id="colorPicker" onchange="updateColor(this.value)">
+  </div>
+
+  <script>
+    function sendCommand(cmd) {
+      fetch(`/light?state=${cmd}`)
+        .then(res => console.log(`Command sent: ${cmd}`))
+        .catch(err => console.error(err));
+    }
+
+    function updateBrightness(value) {
+      document.getElementById("brightnessValue").innerText = value;
+      fetch(`/brightness?value=${value}`)
+        .then(res => console.log(`Brightness: ${value}`))
+        .catch(err => console.error(err));
+    }
+
+    function updateColor(color) {
+      fetch(`/color?value=${color.substring(1)}`) // remove # from hex
+        .then(res => console.log(`Color: ${color}`))
+        .catch(err => console.error(err));
+    }
+  </script>
+</body>
+</html>

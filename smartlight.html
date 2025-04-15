@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Light Control</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+      text-align: center;
+      padding: 50px;
+    }
+    h1 {
+      color: #fcd34d;
+    }
+    button {
+      font-size: 20px;
+      padding: 10px 30px;
+      margin: 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .on {
+      background-color: #22c55e;
+      color: white;
+    }
+    .off {
+      background-color: #ef4444;
+      color: white;
+    }
+    .status {
+      margin-top: 30px;
+      font-size: 18px;
+      color: #facc15;
+    }
+  </style>
+</head>
+<body>
+  <h1>💡 Smart Light Controller</h1>
+  <button class="on" onclick="sendCommand('on')">Turn ON</button>
+  <button class="off" onclick="sendCommand('off')">Turn OFF</button>
+  <div class="status" id="status">Status: Waiting for command...</div>
+
+  <script>
+    function sendCommand(cmd) {
+      fetch(`http://localhost:3000/send/${cmd}`)
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('status').innerText = "Status: " + data;
+        })
+        .catch(err => {
+          document.getElementById('status').innerText = "Error: " + err.message;
+        });
+    }
+  </script>
+</body>
+</html>
